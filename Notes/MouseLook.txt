@@ -1,0 +1,32 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MouseLook : MonoBehaviour
+{
+    float mouseX, mouseY,rotation;
+    [SerializeField]
+    float Sensitivity;
+    [SerializeField]
+    Transform playercamera;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked; 
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        mouseX = Input.GetAxis("Mouse X");
+        mouseY = Input.GetAxis("Mouse Y");
+        // for horizontal movement of mouse
+        transform.Rotate(Vector3.up * mouseX*Sensitivity);
+        // for vertical movement of mouse
+        rotation -= mouseY*Sensitivity; // subtracting due to inverted axis
+        rotation = Mathf.Clamp(rotation,-90f,90f);
+        playercamera.localRotation = Quaternion.Euler(rotation, 0, 0);
+
+    }
+}

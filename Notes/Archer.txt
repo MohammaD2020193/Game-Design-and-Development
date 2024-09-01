@@ -1,0 +1,25 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Archer : MonoBehaviour
+{
+    [SerializeField]
+    GameObject QuestPanal;
+    //private void OnCollisionEnter(Collision collision)
+    //{
+      //  Debug.Log("");
+    //}
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == TagManager.PLAYER)
+        {
+            QuestPanal.SetActive(true);
+        }
+       
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        QuestPanal.SetActive(false);
+    }
+}

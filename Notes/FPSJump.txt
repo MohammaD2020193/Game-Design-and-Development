@@ -1,0 +1,58 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class FPScontroller : MonoBehaviour
+{
+    [SerializeField]
+    CharacterController playcontroller;
+    [SerializeField]
+    float speed = 20;
+    float movementX, movementZ;
+
+    [Header("FPS Jump")]
+    [SerializeField]
+    Transform groundCheckPoint;
+    [SerializeField]
+    LayerMask Groundlayer;
+    bool IsGround;
+    [SerializeField]
+    float Gravity = -15f;
+    [SerializeField]
+    float Jumpforce = 12f;
+    Vector3 Velocity;
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        movementX = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
+        movementZ = Input.GetAxis("Vertical") * speed * Time.deltaTime;
+        playcontroller.Move(transform.right * movementX);
+        playcontroller.Move(transform.forward * movementZ);
+
+        IsGround = Physics.CheckSphere(groundCheckPoint.position, 0.3f, Groundlayer);
+
+        if (IsGround)
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                jump();
+            }
+        }
+        else
+        {
+            Velocity.y += Gravity * Time.deltaTime;
+        }
+        playcontroller.Move(Velocity * Time.deltaTime);
+    }
+
+    void jump()
+    {
+        Velocity.y = Jumpforce;
+    }
+}

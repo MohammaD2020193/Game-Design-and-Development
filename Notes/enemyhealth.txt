@@ -1,0 +1,58 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+using UnityEngine.UI;
+
+public class EnemeHealth : MonoBehaviour
+{
+    [SerializeField]
+    Slider slider;
+    [SerializeField]
+    int HP;
+    public Animator anim;
+    bool isdead;
+    [SerializeField]
+    GameObject QuestPanal;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        slider.minValue = 0;
+        slider.maxValue = HP;
+        slider.value = HP;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+    public void Damage(float demageamount)
+    {
+        slider.value -= demageamount;
+        if (slider.value <= 0 && !isdead)
+        {
+            if (!isdead)
+            {
+                anim.SetTrigger("Death");
+                
+                StartCoroutine("Delay");
+                isdead = true;
+                QuestPanal.SetActive(true);
+            }
+        }else if (slider.value <= 0)
+        {
+            anim.SetTrigger("Death");
+        }
+        else
+        {
+            anim.SetTrigger("Hurt");
+        }
+    }
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(5f);
+        transform.gameObject.SetActive(false);
+    }
+}

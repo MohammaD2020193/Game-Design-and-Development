@@ -1,0 +1,70 @@
+using UnityEngine.UI;
+using UnityEngine;
+using System.Collections;
+public class PlayerHealth : MonoBehaviour
+{
+    [SerializeField]
+    Slider slider;
+    [SerializeField]
+    int HP;   //Health Power
+    [SerializeField]
+    int damageAmount;
+
+    public Image Fill;
+    int genSoundindex;
+    [SerializeField] 
+    AudioSource[] hurt;
+    [SerializeField]
+    public GameObject hurtflash;
+    bool GameOver;
+    [SerializeField]
+    GameObject GameOverScreen;
+    // Start is called before the first frame update
+    void Start()
+    {
+        slider.minValue = 0;
+        slider.maxValue = HP;
+        slider.value = HP;
+        hurtflash.SetActive(false);
+        GameOverScreen.SetActive(false);
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (GameOver)
+        {
+            GameOverScreen.SetActive(true);
+            Time.timeScale = 0f;
+        }
+    }
+    public void Damage()
+    {
+
+        slider.value -= damageAmount;
+        if (slider.value <= 0)
+            //print("Die");
+            GameOver = true;
+        else if (slider.value > 0)
+        {
+            if (slider.value <= 40)
+            {
+                //change slider fill color
+                Fill.color = Color.red;
+
+            }
+            genSoundindex = Random.Range(0, hurt.Length - 1);
+            hurt[genSoundindex].Play();
+            StartCoroutine("hurtDelay");
+        }
+
+
+    }
+    IEnumerator hurtDelay()
+    {
+        hurtflash.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        hurtflash.SetActive(false);
+    }
+}
